@@ -1,9 +1,7 @@
 # BOSH tutorial
 
 
-## Course Outline
-
-### Prerequisites
+## Prerequisites
 
 * laptop with administrator access
 
@@ -47,11 +45,16 @@ Your public key has been saved in /Users/yourname/.ssh/boshtutorial.pub.
 * Clone this repo:
 ` git clone https://github.com/bridgetkromhout/bosh-tutorial`
 
-### Topics
+----
 
-* What is BOSH? Brief overview
+## Overview
+
+ What is BOSH? Brief overview
   * "BOSH is an open source tool for release engineering, deployment, lifecycle management, and monitoring of distributed systems."
   * http://bosh.io/docs/about.html
+
+## AWS infrastructure
+
 * Standing up AWS infrastructure to use with BOSH
   * Terraform
 		`terraform plan`
@@ -62,7 +65,10 @@ Your public key has been saved in /Users/yourname/.ssh/boshtutorial.pub.
   * Looking at how the instance was created (Packer)
     * https://www.packer.io/docs/builders/amazon-ebs.html
     * https://github.com/cloudfoundry/bosh-lite/blob/master/packer/build-aws
-  * Running bosh
+
+
+## Trying BOSH
+
 * Using BOSH (intro exercises)
   * [Learn BOSH](http://mariash.github.io/learn-bosh/)
 
@@ -70,7 +76,9 @@ Your public key has been saved in /Users/yourname/.ssh/boshtutorial.pub.
 bosh status
 ```
     * Misleading message
-	Ubuntu backports openssl fixes; a Ruby gem bosh uses doesn't know that. See https://github.com/nahi/httpclient/blob/v2.7.1/lib/httpclient/ssl_config.rb#L450 for the context of the line we're removing.
+
+Ubuntu backports openssl fixes; a Ruby gem bosh uses doesn't know that. See https://github.com/nahi/httpclient/blob/v2.7.1/lib/httpclient/ssl_config.rb#L450 for the context of the line we're removing.
+
     ```
     ubuntu@agent-id-bosh-0:/$ sudo sed -i '/RSA 1024 bit CA certificates are loaded due to old openssl compatibility/d' /var/lib/gems/2.0.0/gems/httpclient-2.7.1/lib/httpclient/ssl_config.rb
     ```
@@ -94,6 +102,8 @@ ubuntu@agent-id-bosh-0:~/learn-bosh-release$ grep uuid manifest.yml
 director_uuid: 190bb19e-2e13-4f69-99ec-316a5ac637cf
 ubuntu@agent-id-bosh-0:~/learn-bosh-release$
 
+## BOSH concepts
+
 * BOSH stemcells
 
 bosh upload stemcell https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
@@ -101,6 +111,10 @@ bosh upload stemcell https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-tru
 
 * BOSH release
 
+
+## Troubleshooting
+
+## Cloud Foundry
 * Installing CF with BOSH
 
 
