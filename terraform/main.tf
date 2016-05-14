@@ -89,6 +89,11 @@ resource "aws_instance" "boshtutorial" {
   # This instance type has enough resources to run this tutorial
   instance_type = "m3.xlarge"
 
+  root_block_device {
+    volume_size = "100"
+    volume_type = "gp2"
+  }
+
   # Look up the correct AMI based on the region we specified
   ami = "${lookup(var.aws_amis, var.aws_region)}"
 
