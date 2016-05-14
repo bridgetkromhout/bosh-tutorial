@@ -35,7 +35,7 @@ Your identification has been saved in /Users/yourname/.ssh/boshtutorial.
 Your public key has been saved in /Users/yourname/.ssh/boshtutorial.pub.
 ```
 
-* (optional) [Terraform installed](https://www.terraform.io/downloads.html)
+* [Terraform installed](https://www.terraform.io/downloads.html)
   * makes it easier to stand up AWS infrastructure
 	* Download, extract zip file
         * Put contents in your PATH:
@@ -57,15 +57,19 @@ Your public key has been saved in /Users/yourname/.ssh/boshtutorial.pub.
 
 * Standing up AWS infrastructure to use with BOSH
   * Terraform
-		`terraform plan`
-		`terraform apply`
-		`terraform destroy`
+	`terraform plan`
+
+	`terraform apply`
+
+	`terraform destroy`
 
 * Launching bosh-lite instance
   * Looking at how the instance was created (Packer)
     * https://www.packer.io/docs/builders/amazon-ebs.html
     * https://github.com/cloudfoundry/bosh-lite/blob/master/packer/build-aws
+    * https://www.terraform.io/docs/providers/aws/r/instance.html#root_block_device
 
+* More about your AWS instance: `curl http://169.254.169.254/latest/meta-data/`
 
 ## Trying BOSH
 
