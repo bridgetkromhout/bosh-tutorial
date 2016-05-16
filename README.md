@@ -5,9 +5,7 @@
 
 * laptop with administrator access
 
-* comfortable using command line
-	* commands you'll need will be provided, but you will want to be comfortable at a shell prompt.
-	* No GUI version of the tutorial is available, and Windows-user support is limited.
+* comfortable using command line (as no GUI version of the tutorial is available, and Windows support is limited).
 
 * your own AWS account
   * [Signing up for the AWS free tier](https://aws.amazon.com/free/)
@@ -51,19 +49,29 @@ Your public key has been saved in /Users/yourname/.ssh/boshtutorial.pub.
 
  What is BOSH? Brief overview
   * "BOSH is an open source tool for release engineering, deployment, lifecycle management, and monitoring of distributed systems."
+	* Cloud Provider Interface (CPI) - IaaS-agnostic
+	* Create VMs, attach storage, etc.
+		* [AWS CPI github repo](https://github.com/cloudfoundry-incubator/bosh-aws-cpi-release)
+		* [AWS CPI docs](https://bosh.io/docs/aws-cpi.html)
+	* 1 BOSH director, N VMs running BOSH agents
+	* For this tutorial, we're using [bosh-lite](https://github.com/cloudfoundry/bosh-lite) to simulate having multiple VMs.
+	
+
   * http://bosh.io/docs/about.html
 
 ## AWS infrastructure
 
 * Standing up AWS infrastructure to use with BOSH
   * Terraform
-	`terraform plan`
 
-	`terraform apply`
+	`terraform plan` - see what we're going to launch
 
-	`terraform destroy`
+	`terraform apply` - launch AWS infrastructure
+
+	`terraform destroy` - remove all terraform-managed infrastructure
 
 * Launching bosh-lite instance
+
   * Looking at how the instance was created (Packer)
     * https://www.packer.io/docs/builders/amazon-ebs.html
     * https://github.com/cloudfoundry/bosh-lite/blob/master/packer/build-aws
@@ -76,20 +84,20 @@ Your public key has been saved in /Users/yourname/.ssh/boshtutorial.pub.
 * Using BOSH (intro exercises)
   * [Learn BOSH](http://mariash.github.io/learn-bosh/)
 
-```
-bosh status
-```
-    * Misleading message
+`$ bosh status`
 
-Ubuntu backports openssl fixes; a Ruby gem bosh uses doesn't know that. See https://github.com/nahi/httpclient/blob/v2.7.1/lib/httpclient/ssl_config.rb#L450 for the context of the line we're removing.
+* A message about SSL: Ubuntu backports openssl fixes; a Ruby gem bosh uses doesn't know that. See https://github.com/nahi/httpclient/blob/v2.7.1/lib/httpclient/ssl_config.rb#L450 for the context.
 
-    ```
-    ubuntu@agent-id-bosh-0:/$ sudo sed -i '/RSA 1024 bit CA certificates are loaded due to old openssl compatibility/d' /var/lib/gems/2.0.0/gems/httpclient-2.7.1/lib/httpclient/ssl_config.rb
-    ```
+To remove annoying message:
+```
+$ sudo sed -i '/RSA 1024 bit CA certificates are loaded due to old openssl compatibility/d' /var/lib/gems/2.0.0/gems/httpclient-2.7.1/lib/httpclient/ssl_config.rb
+```
 
 ```
 bosh status
 ```
+
+
 
 
 Replace UUID in manifest. You can use an editor or this substitution:
@@ -97,6 +105,7 @@ Replace UUID in manifest. You can use an editor or this substitution:
 sed -i "s/4796378f-cc91-4d93-a1b0-75a9af101708/$(bosh status --uuid)/" manifest.yml
 ```
 
+```
 ubuntu@agent-id-bosh-0:~/learn-bosh-release$ bosh status --uuid
 190bb19e-2e13-4f69-99ec-316a5ac637cf
 ubuntu@agent-id-bosh-0:~/learn-bosh-release$ grep uuid manifest.yml
@@ -105,20 +114,21 @@ ubuntu@agent-id-bosh-0:~/learn-bosh-release$ sed -i "s/4796378f-cc91-4d93-a1b0-7
 ubuntu@agent-id-bosh-0:~/learn-bosh-release$ grep uuid manifest.yml
 director_uuid: 190bb19e-2e13-4f69-99ec-316a5ac637cf
 ubuntu@agent-id-bosh-0:~/learn-bosh-release$
+```
 
 ## BOSH concepts
 
-* BOSH stemcells
 
-bosh upload stemcell https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
+* BOSH release (versioned tarball of a software package, containing ALL of the assets that will be deployed - source files, configuration files, installation scripts, etc)
 
+* BOSH manifest - cluster config specification (in YAML) - what resources are going to be deployed, what services are going to be running on each of resources and properties that will be passed to services configuration files.
 
-* BOSH release
+* BOSH stemcell - A Stemcell is an operating system image (Ubuntu) plus BOSH specifics (agent, monit, etc) that BOSH uses to create VMs.
+	* [Official stemcells on bosh.io](https://bosh.io/stemcells/)
 
+Adding a stemcell to your bosh director:
+`bosh upload stemcell https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent`
 
-## Troubleshooting
-
-## Cloud Foundry
-* Installing CF with BOSH
+* BOSH deployment - a cluster of VMs based on the stemcell, running release software, defined by the manifest.
 
 
