@@ -33,8 +33,8 @@ resource "aws_subnet" "boshtutorial" {
 # Our boshtutorial security group to access
 # the instance over SSH and HTTP
 resource "aws_security_group" "boshtutorial" {
-  name        = "terraform_example"
-  description = "Used in the terraform"
+  name        = "boshtutorial"
+  description = "Used for bosh tutorial"
   vpc_id      = "${aws_vpc.boshtutorial.id}"
 
   # SSH access from anywhere
@@ -107,6 +107,6 @@ resource "aws_instance" "boshtutorial" {
 
 }
 
-output "ssh to your instance with this command (replace the IP):\n ssh -o StrictHostKeyChecking=no -i ~/.ssh/boshtutorial ubuntu@IP\n\n"
+output "To log in: replace <IP> with the IP listed below.\nssh -o StrictHostKeyChecking=no -i ~/.ssh/boshtutorial ubuntu@<IP>\n\n"
 	{ value = "${aws_instance.boshtutorial.public_ip}" }
 
